@@ -1,0 +1,79 @@
+<!-- fedesoft js -->
+<script src="{{ root }}assets/js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.8.9/dist/cookieconsent.js"></script>
+
+<script>
+    window.addEventListener('load', function(){
+
+        // obtain plugin
+        var cc = initCookieConsent();
+
+        // run plugin with your configuration
+        cc.run({
+            current_lang: 'es',
+            autoclear_cookies: true,         
+            page_scripts: true,                        
+            revision: 1,       
+            
+            gui_options: {
+                consent_modal: {
+                    layout: 'box',               // box/cloud/bar
+                    position: 'bottom left',     // bottom/middle/top + left/right/center
+                    transition: 'slide',           // zoom/slide
+                    swap_buttons: false            // enable to invert buttons
+                }
+            },
+
+            onFirstAction: function(user_preferences, cookie){},
+
+            onAccept: function (cookie) {},
+
+            onChange: function (cookie, changed_categories) {},
+
+            languages: {
+                'es': {
+                    consent_modal: {
+                        title: '&#127850; ¡Hola! &#127850;',
+                        description: '<p>Este sitio web utiliza cookies básicas y necesarias para el correcto funcionamiento del sitio.</p><p>No recopilan información personal y son esenciales para garantizar la seguridad y la accesibilidad del sitio web.</p>',
+                        primary_btn: {
+                            text: 'Aceptar',
+                            role: 'accept_all'             
+                        },
+                        secondary_btn: {
+                            text: 'Rechazar',
+                            role: 'accept_necessary'  
+                        }
+                    },
+
+                    settings_modal: {
+                        title: 'Preferencias',
+                        save_settings_btn: 'Guardar preferencias',
+                        accept_all_btn: 'Aceptar',
+                        reject_all_btn: 'Rechazar',
+                        close_btn_label: 'Cerrar',
+                        cookie_table_headers: [
+                            {col1: 'Name'},
+                            {col2: 'Domain'},
+                            {col3: 'Expiration'},
+                            {col4: 'Description'}
+                        ],
+                        blocks: [
+                            {
+                                title: 'Uso 📢',
+                                description: 'Utilizo cookies para garantizar las funcionalidades básicas del sitio web y mejorar su experiencia en línea. Para obtener más detalles relacionados con las cookies y otros datos confidenciales, lea el <a href="#" class="cc-link">privacy policy</a>.'
+                            }, {
+                                title: 'Cookies estrictamente necesarias',
+                                description: 'Estas cookies son esenciales para el correcto funcionamiento de mi sitio web. Sin estas cookies, el sitio web no funcionaría correctamente.',
+                                toggle: {
+                                    value: 'necessary',
+                                    enabled: true,
+                                    readonly: true  
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        });
+    });
+</script>
