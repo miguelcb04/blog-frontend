@@ -1,44 +1,157 @@
 "use strict";
-
+//jquery
 //Initialize fedesoft modal
-function initInfoModal(){
-    if ((localStorage.getItem('update') === undefined) || (localStorage.getItem('update') === null)){
+
+
+
+//truncatewords       letras y palabras
+// for (let post of res.posts) {
+//     // Ingresamos el título y contenido del post
+//     postList.innerHTML += `
+//     <div class="column">
+//         <div class="flat-card post-container is-long" data-post-id="${post.id}" data-post-category="${post.category}">
+//             <div class="left-image is-md">
+//                 <img src="${post.image}" data-demo-src="${post.demoSrc}" alt="${post.title}">
+//             </div>
+//             <div class="post-info">
+//                 <a class="post-details-link" href="">
+//                     <h3 class="post-name featured">${post.author}</h3>
+//                 </a>
+//                 <p class="post-description">${post.post}</p>
+//                 <p class="post-more">
+//                     <span>Leer más</span>
+//                 </p>
+//             </div>
+//         </div>
+//     </div>
+// `;
+// }    
+
+
+
+
+
+function initInfoModal() {
+    if ((localStorage.getItem('update') === undefined) || (localStorage.getItem('update') === null)) {
         setTimeout(function () {
             $('#info-modal').addClass('is-active');
         }, 3000)
     }
 
-    $('#info-modal .close-link').on('click', function(){
-        if ($('#info-modal-toggle').prop('checked') === true){
+    $('#info-modal .close-link').on('click', function () {
+        if ($('#info-modal-toggle').prop('checked') === true) {
             localStorage.setItem('update', true);
         }
         $(this).closest('#info-modal').removeClass('is-active');
         $(this).closest('#info-modal').find('iframe').remove();
     })
 }
+function truncateWords(text, limit) {
+    const words = text.split(" ");
+    if (words.length > limit) {
+        return words.slice(0, limit).join(" ") + "...";
+    }
+    return text;
+}
 
-$(document).ready(function() {
+function truncateLetters(text, limit) {
+    if (text.length > limit) {
+        return text.slice(0, limit) + "...";
+    }
+    return text;
+}
+
+
+$(document).ready(function () {
+
+
+    let postList = document.getElementById("posts-list");
+    let links = document.getElementById("links");
+
+    function updatePosts(url) {
+        if (url) {
+            // Reiniciamos los posts actuales
+            postList.innerHTML = "";
+            // Llamamos a la API de posts con Fetch
+            fetch(url)
+                .then(res => res.json())
+                .then(res => {
+                    console.log('Response from API:', res); // Añade esto para depuración
+
+                    // Verificamos si res.posts es un array
+                    if (!Array.isArray(res.posts)) {
+                        console.error('Response posts is not an array:', res.posts);
+                        throw new TypeError("Response posts is not an array");
+                    }
+
+                    // Obtenemos y recorremos los posts obtenidos
+                    for (let post of res.posts) {
+                        // Truncamos el autor y el contenido del post
+                        const truncatedAuthor = truncateLetters(post.author, 50); // Cambia 50 por el número de letras que deseas
+                        const truncatedPost = truncateLetters(post.post, 120); // Cambia 30 por el número de palabras que deseas
+
+                        // Ingresamos el título y contenido del post
+                        postList.innerHTML += `
+                    <div class="column">
+                      <div class="flat-card post-container is-long" data-post-id="${post.id}" data-post-category="${post.category}">
+                        <div class="left-image is-md">
+                          <img src="${post.image}" data-demo-src="${post.demoSrc}" alt="${post.title}">
+                        </div>
+                        <div class="post-info">
+                          <a class="post-details-link" href="">
+                            <h3 class="post-name featured">${truncatedAuthor}</h3>
+                          </a>
+                          <p class="post-description">${truncatedPost}</p>
+                          <p class="post-more">
+                            <span>Leer más</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  `;
+                    }
+
+                    // Pintamos los enlaces de siguiente o anterior de la paginación
+                    links.innerHTML = "";
+                    console.log(res.page, res.total_pages);
+
+                    if (res.page > 1) {
+                        links.innerHTML += `<button onclick="updatePosts('http://localhost:3000/api/posts?page=${res.page - 1}')">Atrás</button>`;
+                    }
+                    if (res.page < res.total_pages) {
+                        links.innerHTML += `<button onclick="updatePosts('http://localhost:3000/api/posts?page=${res.page + 1}')">Siguiente</button>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching posts:', error); // Añade esto para depuración
+                });
+        }
+    }
+
+    // Llamada inicial a la API
+    updatePosts("http://localhost:3000/api/posts?page=1");
+
 
     //Page loader
     if ($('.pageloader').length) {
 
         $('.pageloader').toggleClass('is-active');
 
-        $(window).on('load', function() {
-            setTimeout( function() {
+        $(window).on('load', function () {
+            setTimeout(function () {
                 $('.pageloader').toggleClass('is-active');
                 $('.infraloader').removeClass('is-active')
-            }, 700 );
+            }, 700);
         })
     }
 
     //Navbar Clone
     if ($('#navbar-clone').length) {
-        $(window).scroll(function() {
+        $(window).scroll(function () {
             var height = $(window).scrollTop();
-            if(height  > 50) {
+            if (height > 50) {
                 $("#navbar-clone").addClass('is-active');
-            } else{
+            } else {
                 $("#navbar-clone").removeClass('is-active');
             }
         });
@@ -46,7 +159,7 @@ $(document).ready(function() {
 
     //Mobile menu toggle
     if ($('.navbar-burger').length) {
-        $('.navbar-burger').on("click", function(){
+        $('.navbar-burger').on("click", function () {
             $('.navbar-burger').toggleClass('is-active');
             if ($('.navbar-menu').hasClass('is-active')) {
                 $('.navbar-menu').removeClass('is-active');
@@ -63,38 +176,38 @@ $(document).ready(function() {
 
     // Scroll to hash
     $('a[href*="#"]')
-    // Remove links that don't actually link to anything
+        // Remove links that don't actually link to anything
         .not('[href="#"]')
         .not('[href="#0"]')
-        .on('click', function(event) {
-        // On-page links
-        if (
-            location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
-            &&
-            location.hostname == this.hostname
-        ) {
-            // Figure out element to scroll to
-            var target = $(this.hash);
-            target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-            // Does a scroll target exist?
-            if (target.length) {
-                // Only prevent default if animation is actually gonna happen
-                event.preventDefault();
-                $('html, body').animate({
-                    scrollTop: target.offset().top
-                }, 550, function() {
-                    // Callback after animation
-                    // Must change focus!
-                    var $target = $(target);
-                    $target.focus();
-                    if ($target.is(":focus")) { // Checking if the target was focused
-                        return false;
-                    } else {
-                        $target.attr('tabindex','-1'); // Adding tabindex for elements not focusable
-                        $target.focus(); // Set focus again
-                    };
-                });
+        .on('click', function (event) {
+            // On-page links
+            if (
+                location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+                &&
+                location.hostname == this.hostname
+            ) {
+                // Figure out element to scroll to
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                // Does a scroll target exist?
+                if (target.length) {
+                    // Only prevent default if animation is actually gonna happen
+                    event.preventDefault();
+                    $('html, body').animate({
+                        scrollTop: target.offset().top
+                    }, 550, function () {
+                        // Callback after animation
+                        // Must change focus!
+                        var $target = $(target);
+                        $target.focus();
+                        if ($target.is(":focus")) { // Checking if the target was focused
+                            return false;
+                        } else {
+                            $target.attr('tabindex', '-1'); // Adding tabindex for elements not focusable
+                            $target.focus(); // Set focus again
+                        };
+                    });
+                }
             }
-        }
-    });
+        });
 })
