@@ -113,14 +113,14 @@ $(document).ready(function () {
 
                     // Pintamos los enlaces de siguiente o anterior de la paginación
                     links.innerHTML = "";
-                    console.log(res.page, res.total_pages);
+                    console.log(res.page, res.total_posts);
 
                     if (res.page > 1) {
                         links.innerHTML += `<button onclick="updatePosts('http://localhost:3000/api/posts?page=${res.page - 1}')">Atrás</button>`;
-                    }
-                    if (res.page < res.total_pages) {
+                      }
+                      if (res.page < res.total_posts) {
                         links.innerHTML += `<button onclick="updatePosts('http://localhost:3000/api/posts?page=${res.page + 1}')">Siguiente</button>`;
-                    }
+                      }
                 })
                 .catch(error => {
                     console.error('Error fetching posts:', error); // Añade esto para depuración

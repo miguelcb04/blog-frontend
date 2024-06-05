@@ -1,22 +1,4 @@
-/*! _cards.scss | Nephos | CSS Ninja */
-
-/* ==========================================================================
-Shop cards
-========================================================================== */
-
-/***
-TABLE OF CONTENTS
-=============================================================================
-0. Basic Flat Card
-1. List Flat cards
-=============================================================================
-***/
-
-/* ==========================================================================
-0. Basic Flat Card
-========================================================================== */
-
-//minimal card
+// minimal card
 .flat-card {
     position: relative;
     background-color: $white;
@@ -30,7 +12,7 @@ TABLE OF CONTENTS
     max-height: 270px;
     min-height: 270px;
 
-    //post image
+    // post image
     .image {
         text-align: center;
         margin: 40px 0;
@@ -41,9 +23,9 @@ TABLE OF CONTENTS
         }
     }
 
-    //post meta
+    // post meta
     .post-info {
-        padding: 0 20px;
+        padding: 0 60px;
         background-color: #FFD700;
 
         a {
@@ -55,7 +37,7 @@ TABLE OF CONTENTS
             }
         }
 
-        //name
+        // name
         .post-name {
             font-family: 'Raleway', sans-serif;
             text-transform: uppercase;
@@ -63,14 +45,14 @@ TABLE OF CONTENTS
             font-weight: 500;
         }
 
-        //description
+        // description
         .post-description {
             font-size: 80%;
             color: $muted-grey;
         }
 
-        //price
-        .post-price {
+        // post-info
+        .post-info {
             font-size: 90%;
             font-weight: 500;
             color: $primary;
@@ -83,7 +65,7 @@ TABLE OF CONTENTS
                 }
             }
 
-            //Strike trough price
+            // Strike through price
             .sale-price {
                 color: $muted-grey;
                 text-decoration: line-through;
@@ -99,7 +81,7 @@ TABLE OF CONTENTS
         }
     }
 
-    //Auto height modifier
+    // Auto height modifier
     &.is-auto {
         height: auto !important;
         width: 100% !important;
@@ -108,18 +90,18 @@ TABLE OF CONTENTS
         max-width: auto !important;
     }
 
-    //adds a box shadow to the card on hover
+    // adds a box shadow to the card on hover
     &:hover {
         box-shadow: 0px 5px 43px rgba(0, 0, 0, 0.11) !important;
     }
 
-    //long card modifier
+    // long card modifier
     &.is-long {
         display: flex;
         align-items: center;
         justify-content: space-around;
 
-        //Left image
+        // Left image
         .left-image {
             img {
                 max-width: 260px;
@@ -130,8 +112,10 @@ TABLE OF CONTENTS
             }
         }
 
-        //Featured Name
+        // Featured Name
         .post-info {
+            width: 70%;
+
             .post-name.featured {
                 font-size: 1.2rem;
             }
@@ -142,13 +126,14 @@ TABLE OF CONTENTS
         }
     }
 
-    //Animated cart and whishlist icons
+    // Animated cart and wishlist icons
     .actions {
         position: absolute;
         top: 15px;
         right: 15px;
 
-        div, span {
+        div,
+        span {
             display: inline-block;
             transition: all .3s;
 
@@ -159,20 +144,19 @@ TABLE OF CONTENTS
                 stroke: $muted-grey;
                 transition: all .3s;
 
-                //opacity: 0;
-           
+                // opacity: 0;
             }
 
             &:hover {
                 cursor: pointer;
             }
 
-            //add to cart
+            // add to cart
             &.add {
                 transition-delay: .1s;
                 transform: translateX(250px);
 
-                //Active state
+                // Active state
                 svg.is-active {
                     stroke: $primary;
                 }
@@ -182,12 +166,12 @@ TABLE OF CONTENTS
                 }
             }
 
-            //add to wishlist
+            // add to wishlist
             &.like {
                 transition-delay: .2s;
                 transform: translateX(200px);
 
-                //Active state
+                // Active state
                 svg.is-active {
                     stroke: $red;
                     fill: $red;
@@ -201,7 +185,7 @@ TABLE OF CONTENTS
         }
     }
 
-    //Sales indicator
+    // Sales indicator
     .on-sale {
         position: absolute;
         top: 0;
@@ -223,10 +207,29 @@ TABLE OF CONTENTS
         }
     }
 
-    //translate in icons on hover
+    // translate in icons on hover
     &:hover {
-        .add, .like {
+        .add,
+        .like {
             transform: translateX(0) !important;
+        }
+    }
+}
+
+// Media query for mobile devices
+@media (max-width: 768px) {
+    .flat-card.is-long {
+        flex-direction: column;
+
+        .left-image {
+            img {
+                max-width: 100%;
+            }
+        }
+
+        .post-info {
+            width: 100%;
+            padding: 10px 20px;
         }
     }
 }
@@ -235,9 +238,9 @@ TABLE OF CONTENTS
 1. List Flat Card
 ========================================================================== */
 
-//List cards
+// List cards
 .flat-card {
-    //List modifier
+    // List modifier
     &.is-list-item {
         display: flex;
         justify-content: flex-start;
@@ -250,7 +253,7 @@ TABLE OF CONTENTS
             margin-top: 0 !important;
         }
 
-        //Adjusting spans to display block
+        // Adjusting spans to display block
         span {
             display: block;
 
@@ -265,7 +268,7 @@ TABLE OF CONTENTS
             }
         }
 
-        //Star Rating
+        // Star Rating
         .rating {
             i {
                 font-size: 12px;
@@ -283,9 +286,10 @@ TABLE OF CONTENTS
             }
         }
 
-        //post meta
+        // post meta
         .post-info {
-            padding: 20px 40px !important;
+            width: 70%;
+            padding: 20px 60px !important;
 
             .post-price {
                 span {
@@ -294,7 +298,7 @@ TABLE OF CONTENTS
             }
         }
 
-        //Abstract
+        // Abstract
         .post-abstract {
             margin-left: auto;
             padding: 15px 0;
@@ -302,7 +306,7 @@ TABLE OF CONTENTS
             color: $muted-grey;
             font-size: .8rem;
 
-            //View more link
+            // View more link
             .view-more {
                 display: flex;
                 justify-content: flex-end;
@@ -320,7 +324,7 @@ TABLE OF CONTENTS
                     svg {
                         position: relative;
 
-                        //top: 1.4px;
+                        // top: 1.4px;
                         height: 16px;
                         width: 16px;
                         opacity: 0;
@@ -336,7 +340,7 @@ TABLE OF CONTENTS
             }
         }
 
-        //Actions
+        // Actions
         .actions {
             right: 40px !important;
 
