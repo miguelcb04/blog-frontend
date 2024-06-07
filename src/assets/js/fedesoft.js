@@ -46,6 +46,8 @@ function initInfoModal() {
         $(this).closest('#info-modal').find('iframe').remove();
     })
 }
+
+
 function truncateWords(text, limit) {
     const words = text.split(" ");
     if (words.length > limit) {
@@ -61,76 +63,78 @@ function truncateLetters(text, limit) {
     return text;
 }
 
-
-$(document).ready(function () {
-
+function updatePosts(url) {
 
     let postList = document.getElementById("posts-list");
     let links = document.getElementById("links");
 
-    function updatePosts(url) {
-        if (url) {
-            // Reiniciamos los posts actuales
-            postList.innerHTML = "";
-            // Llamamos a la API de posts con Fetch
-            fetch(url)
-                .then(res => res.json())
-                .then(res => {
-                    console.log('Response from API:', res); // Añade esto para depuración
 
-                    // Verificamos si res.posts es un array
-                    if (!Array.isArray(res.posts)) {
-                        console.error('Response posts is not an array:', res.posts);
-                        throw new TypeError("Response posts is not an array");
-                    }
+    if (url) {
+        // Reiniciamos los posts actuales
+        postList.innerHTML = "";
+        // Llamamos a la API de posts con Fetch
+        fetch(url)
+            .then(res => res.json())
+            .then(res => {
+                console.log('Response from API:', res); // Añade esto para depuración
 
-                    // Obtenemos y recorremos los posts obtenidos
-                    for (let post of res.posts) {
-                        // Truncamos el autor y el contenido del post
-                        const truncatedAuthor = truncateLetters(post.author, 50); // Cambia 50 por el número de letras que deseas
-                        const truncatedPost = truncateLetters(post.post, 120); // Cambia 30 por el número de palabras que deseas
+                // Verificamos si res.posts es un array
+                if (!Array.isArray(res.posts)) {
+                    console.error('Response posts is not an array:', res.posts);
+                    throw new TypeError("Response posts is not an array");
+                }
 
-                        // Ingresamos el título y contenido del post
-                        postList.innerHTML += `
-                    <div class="column">
-                      <div class="flat-card post-container is-long" data-post-id="${post.id}" data-post-category="${post.category}">
-                        <div class="left-image is-md">
-                          <img src="${post.image}" data-demo-src="${post.demoSrc}" alt="${post.title}">
-                        </div>
-                        <div class="post-info">
-                          <a class="post-details-link" href="">
-                            <h3 class="post-name featured">${truncatedAuthor}</h3>
-                          </a>
-                          <p class="post-description">${truncatedPost}</p>
-                          <p class="post-more">
-                            <span>Leer más</span>
-                          </p>
-                        </div>
-                      </div>
+                // Obtenemos y recorremos los posts obtenidos
+                for (let post of res.posts) {
+                    // Truncamos el autor y el contenido del post
+                    const truncatedAuthor = truncateLetters(post.author, 50); // Cambia 50 por el número de letras que deseas
+                    const truncatedPost = truncateLetters(post.post, 120); // Cambia 30 por el número de palabras que deseas
+
+                    // Ingresamos el título y contenido del post
+                    postList.innerHTML += `
+                <div class="column">
+                  <div class="flat-card post-container is-long" data-post-id="${post.id}" data-post-category="${post.category}">
+                    <div class="left-image is-md">
+                      <img src="${post.image}" data-demo-src="${post.demoSrc}" alt="${post.title}">
                     </div>
-                  `;
-                    }
+                    <div class="post-info">
+                      <a class="post-details-link" href="">
+                        <h3 class="post-name featured">${truncatedAuthor}</h3>
+                      </a>
+                      <p class="post-description">${truncatedPost}</p>
+                      <p class="post-more">
+                        <span>Leer más</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              `;
+                }
 
-                    // Pintamos los enlaces de siguiente o anterior de la paginación
-                    links.innerHTML = "";
-                    console.log(res.page, res.total_posts);
+                // Pintamos los enlaces de siguiente o anterior de la paginación
+                links.innerHTML = '<div class="pagination-container"></div>';
+                const paginationContainer = document.querySelector('.pagination-container');
+                console.log(res.page, res.total_posts);
 
-                    if (res.page > 1) {
-                        links.innerHTML += `<button onclick="updatePosts('http://localhost:3000/api/posts?page=${res.page - 1}')">Atrás</button>`;
-                      }
-                      if (res.page < res.total_posts) {
-                        links.innerHTML += `<button onclick="updatePosts('http://localhost:3000/api/posts?page=${res.page + 1}')">Siguiente</button>`;
-                      }
-                })
-                .catch(error => {
-                    console.error('Error fetching posts:', error); // Añade esto para depuración
-                });
-        }
+                if (res.page > 1) {
+                    paginationContainer.innerHTML += `<button class="pagination-button" onclick="updatePosts('http://localhost:3000/api/posts?page=${res.page - 1}')">Atrás</button>`;
+                }
+                if (res.page < res.total_posts) {
+                    paginationContainer.innerHTML += `<button class="pagination-button" onclick="updatePosts('http://localhost:3000/api/posts?page=${res.page + 1}')">Siguiente</button>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching posts:', error); // Añade esto para depuración
+            });
     }
+}
+
+
+$(document).ready(function () {
+
 
     // Llamada inicial a la API
     updatePosts("http://localhost:3000/api/posts?page=1");
-
 
     //Page loader
     if ($('.pageloader').length) {
