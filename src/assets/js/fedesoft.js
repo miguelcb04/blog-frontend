@@ -134,7 +134,7 @@ $(document).ready(function () {
 
 
     // Llamada inicial a la API
-    updatePosts("http://localhost:3000/api/posts?page=1");
+    updatePosts("https://blog-backend-beta-khaki.vercel.app/");
 
     //Page loader
     if ($('.pageloader').length) {
