@@ -134,7 +134,9 @@ $(document).ready(function () {
 
 
     // Llamada inicial a la API
-    updatePosts("https://blog-backend-beta-khaki.vercel.app/");
+    
+    // updatePosts("http://localhost:3000/api/posts?page=1"); //En local
+    updatePosts("https://blog-backend-beta-khaki.vercel.app/api/posts?page=1"); //En vercel 
 
     //Page loader
     if ($('.pageloader').length) {
